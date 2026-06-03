@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,8 +13,6 @@ public class Main {
         numbers.add(2);
         numbers.add(3);
 
-        for (Integer number : numbers) {
-            System.out.println(number);
-        }
+        IntStream.range(0,3).forEach(System.out::println);
     }
 }
