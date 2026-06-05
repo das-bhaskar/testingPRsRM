@@ -4,6 +4,22 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class Main {
+
+    public boolean wasInitialized() {
+        return false;
+    }
+
+    void renderBanner() {
+        String platform = System.getProperty("os.name").toLowerCase();
+        String browser = System.getProperty("browser").toLowerCase();
+        int resize = 20;
+        if ((platform.toUpperCase().indexOf("MAC") > -1) &&
+                (browser.toUpperCase().indexOf("IE") > -1) &&
+                wasInitialized() && resize > 0 )
+        {
+            // do something
+        }
+    }
     public static void main(String[] args) {
 
         System.out.println("Hello, World!");
