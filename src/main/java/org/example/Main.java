@@ -14,11 +14,13 @@ public class Main {
         String browser = System.getProperty("browser", "").toLowerCase();
         int resize = 20;
 
-        if (platform.toUpperCase().indexOf("MAC") > -1
-                && browser.toUpperCase().indexOf("IE") > -1
-                && wasInitialized()
-                && resize > 0) {
-            // baseline logic
+        // EXPECT: PURE (direct extraction only)
+        final boolean isMacOs = platform.toUpperCase().indexOf("MAC") > -1;
+        final boolean isIE = browser.toUpperCase().indexOf("IE") > -1;
+        final boolean wasResized = resize > 0;
+
+        if (isMacOs && isIE && wasInitialized() && wasResized) {
+            // unchanged behavior
         }
     }
 
@@ -26,31 +28,46 @@ public class Main {
         String platform = System.getProperty("os.name").toLowerCase();
         String browser = System.getProperty("browser", "").toLowerCase();
 
-        if ((((platform.toUpperCase().contains("LINUX"))))
-                && ((browser.toUpperCase().contains("CHROME")))) {
-            // baseline logic
+        // EXPECT: PURE (nested extraction + wrapper parentheses)
+        final boolean hasLinuxToken = platform.toUpperCase().contains("LINUX");
+        final boolean isLinux = (hasLinuxToken);
+        final boolean isChrome = ((browser.toUpperCase().contains("CHROME")));
+
+        if ((((isLinux))) && ((isChrome))) {
+            // unchanged behavior
         }
     }
 
     int case3_multiLevelPureBaseline(int w, int h, int padding, int offset) {
-        int score = (w * h) + padding + offset;
+        // EXPECT: PURE (multi-level nested extraction)
+        final int baseArea = w * h;
+        final int intermediate = baseArea + padding;
+        final int score = intermediate + offset;
         return score > 100 ? score : 100;
     }
 
     boolean case4_impureOperatorBaseline() {
         String platform = System.getProperty("os.name").toLowerCase();
-        return platform.toUpperCase().indexOf("MAC") > -1;
+
+        // EXPECT: IMPURE (semantic change: > -1 became > 0)
+        final boolean isMacOs = platform.toUpperCase().indexOf("MAC") > 0;
+        return isMacOs;
     }
 
     boolean case5_impureExtraConditionBaseline(int resize) {
         String browser = System.getProperty("browser", "").toLowerCase();
-        return browser.toUpperCase().indexOf("IE") > -1;
+
+        // EXPECT: IMPURE (added extra condition after extraction)
+        final boolean isIE = browser.toUpperCase().indexOf("IE") > -1;
+        return isIE && resize > 10;
     }
 
     boolean case6_repeatedPureBaseline() {
         String platform = System.getProperty("os.name").toLowerCase();
-        return platform.toUpperCase().indexOf("MAC") > -1
-                || platform.toUpperCase().indexOf("MAC") > -1;
+
+        // EXPECT: PURE (extract repeated expression)
+        final boolean isMacOs = platform.toUpperCase().indexOf("MAC") > -1;
+        return isMacOs || isMacOs;
     }
 
     public static void main(String[] args) {
